@@ -1,5 +1,6 @@
 import time
 from io import BytesIO
+# from
 from PIL import Image
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver import ActionChains

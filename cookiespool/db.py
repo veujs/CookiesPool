@@ -11,7 +11,8 @@ class RedisClient(object):
         :param port: 端口
         :param password: 密码
         """
-        self.db = redis.StrictRedis(host=host, port=port, password=password, decode_responses=True)
+        # self.db = redis.StrictRedis(host=host, port=port, password=password, decode_responses=True)
+        self.db = redis.StrictRedis(host=host, port=port, password=None, decode_responses=True)
         self.type = type
         self.website = website
 
@@ -29,6 +30,7 @@ class RedisClient(object):
         :param value: 密码或Cookies
         :return:
         """
+        print("set redis data")
         return self.db.hset(self.name(), username, value)
 
     def get(self, username):

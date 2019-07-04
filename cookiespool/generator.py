@@ -14,7 +14,7 @@ class CookiesGenerator(object):
         :param browser: 浏览器, 若不使用浏览器则可设置为 None
         """
         self.website = website
-        self.cookies_db = RedisClient('cookies', self.website)
+        self.cookies_db = RedisClient('cookies', self.website)  # 参数为 type website
         self.accounts_db = RedisClient('accounts', self.website)
         self.init_browser()
 
@@ -34,7 +34,11 @@ class CookiesGenerator(object):
             self.browser.set_window_size(1400, 500)
         elif BROWSER_TYPE == 'Chrome':
             self.browser = webdriver.Chrome()
-    
+        elif BROWSER_TYPE == 'Firefox':
+
+            self.browser = webdriver.Firefox()
+
+
     def new_cookies(self, username, password):
         """
         新生成Cookies，子类需要重写
@@ -42,6 +46,7 @@ class CookiesGenerator(object):
         :param password: 密码
         :return:
         """
+        # print("newcookies gender")
         raise NotImplementedError
     
     def process_cookies(self, cookies):
@@ -60,14 +65,15 @@ class CookiesGenerator(object):
         运行, 得到所有账户, 然后顺次模拟登录
         :return:
         """
-        accounts_usernames = self.accounts_db.usernames()
-        cookies_usernames = self.cookies_db.usernames()
+        accounts_usernames = self.accounts_db.usernames()  # 返回账户密码hash表中的keys列表--账户名列表
+        cookies_usernames = self.cookies_db.usernames()    # 返回账户cookies的hash表中的含有cookies的账户列表--账户名列表
         
         for username in accounts_usernames:
             if not username in cookies_usernames:
                 password = self.accounts_db.get(username)
                 print('正在生成Cookies', '账号', username, '密码', password)
                 result = self.new_cookies(username, password)
+                print('11111111111111111111111111:%s ' % result)
                 # 成功获取
                 if result.get('status') == 1:
                     cookies = self.process_cookies(result.get('content'))

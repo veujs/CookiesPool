@@ -28,7 +28,8 @@ class Scheduler(object):
             print('Cookies生成进程开始运行')
             try:
                 for website, cls in GENERATOR_MAP.items():
-                    generator = eval(cls + '(website="' + website + '")')
+                    generator = eval(cls + '(website="' + website + '")')  # 进行字符串拼接 WeiboCookiesGenerator(website="weibo")
+                    # print(cls + '(website="' + website + '")')
                     generator.run()
                     print('Cookies生成完成')
                     generator.close()
